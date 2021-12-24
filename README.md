@@ -16,21 +16,26 @@ yarn add merkle-tree-zilliqa-js
 
 ## Example
 
-1. The first step is to import the function generateTree from the package.
+1. The first step is to import the function generateTreeforBech32,generateTreeforBase16 from the package.
 
 ```javascript
-import { generateTree } from 'merkle-tree-zilliqa-js';
+import { generateTreeforBech32, generateTreeforBase16 } from 'merkle-tree-zilliqa-js';
 ```
 
-2. The next step is to send a array of data to the generate tree function. Make sure that the data has the following format:
+2. The next step is to send a array of data to the generate tree function. The format of data should be:
+   [
+   {
+   wallet:"",
+   address:""
+   },
+   {
+   wallet:"",
+   address:""
+   },
+   .....
+   ]
 
-[
-{
-wallet:"zil..............",
-amount:"10000000000",
-}
-]
-Note: Make sure that the wallet passed is in the base32 format i.e zil.............
+   ### The address should be in base16 for generateTreeforBase16 and bech32 for generateTreeforBase16.
 
 3. And boom, you are done! It returns you with the merkle root and proof for all the passed wallets, which can be passed on Smart Contracts for claiming the rewards.
 
