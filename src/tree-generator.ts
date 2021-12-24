@@ -1,7 +1,7 @@
-const { sha256 } = require('js-sha256');
-const { MerkleTree } = require('merkletreejs');
-const { bytes, BN } = require('@zilliqa-js/util');
-const { fromBech32Address } = require('@zilliqa-js/crypto');
+import { sha256 } from 'js-sha256';
+import { MerkleTree } from 'merkletreejs';
+import { bytes, BN } from '@zilliqa-js/util';
+import { fromBech32Address } from '@zilliqa-js/crypto';
 
 interface DataInterface {
   wallet: string;
@@ -10,7 +10,7 @@ interface DataInterface {
 
 const getHashData = (el: any) => {
   return sha256([
-    ...bytes.hexToByteArray(fromBech32Address(el.wallet).slice(2, el.wallet.length), 32),
+    ...bytes.hexToByteArray(fromBech32Address(el.wallet).slice(2, el.wallet.length)),
     ...bytes.hexToByteArray(sha256(new BN(el.amount).toArray('be', 16))),
   ]);
 };
@@ -30,12 +30,11 @@ export const generateTree = (props: DataInterface[]) => {
   const tree = new MerkleTree(leavesData, sha256, {
     sortLeaves: true,
   });
-  const root = tree.getRoot().toString('hex');
+  const merkleRoot = tree.getRoot().toString('hex');
   accumulator.forEach((data) => {
     const proof = tree.getHexProof(data.hex);
     data.proof = proof;
     delete data.hex;
   });
-  console.log({ root: root, data: accumulator });
-  return { root: `0x${root}`, data: accumulator };
+  return { root: `0x${merkleRoot}`, data: accumulator };
 };
