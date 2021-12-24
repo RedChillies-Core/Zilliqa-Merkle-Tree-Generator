@@ -10,19 +10,48 @@ interface DataInterface {
 
 const getHashData = (el: any) => {
   return sha256([
-    ...bytes.hexToByteArray(fromBech32Address(el.wallet).slice(2, el.wallet.length)),
+    ...bytes.hexToByteArray(fromBech32Address(el.wallet.toLowerCase()).slice(2, el.wallet.length)),
+    ...bytes.hexToByteArray(sha256(new BN(el.amount).toArray('be', 16))),
+  ]);
+};
+const getHashDataBase16 = (el: any) => {
+  return sha256([
+    ...bytes.hexToByteArray(el.wallet.toLowerCase().slice(2, el.wallet.length)),
     ...bytes.hexToByteArray(sha256(new BN(el.amount).toArray('be', 16))),
   ]);
 };
 
-export const generateTree = (props: DataInterface[]) => {
+export const generateTreeforBech32 = (props: DataInterface[]) => {
   const leavesData: string[] = [];
   const accumulator: any[] = [];
   props.forEach((element) => {
     const hashedData = getHashData(element);
     leavesData.push(hashedData);
     accumulator.push({
-      wallet: fromBech32Address(element.wallet),
+      wallet: fromBech32Address(element.wallet).toLowerCase(),
+      hex: hashedData,
+      amount: element.amount,
+    });
+  });
+  const tree = new MerkleTree(leavesData, sha256, {
+    sortLeaves: true,
+  });
+  const merkleRoot = tree.getRoot().toString('hex');
+  accumulator.forEach((data) => {
+    const proof = tree.getHexProof(data.hex);
+    data.proof = proof;
+    delete data.hex;
+  });
+  return { root: `0x${merkleRoot}`, data: accumulator };
+};
+export const generateTreeforBase16 = (props: DataInterface[]) => {
+  const leavesData: string[] = [];
+  const accumulator: any[] = [];
+  props.forEach((element) => {
+    const hashedData = getHashDataBase16(element);
+    leavesData.push(hashedData);
+    accumulator.push({
+      wallet: element.wallet.toLowerCase(),
       hex: hashedData,
       amount: element.amount,
     });
