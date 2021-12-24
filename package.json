@@ -1,6 +1,6 @@
 {
   "name": "merkle-tree-zilliqa-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A JS Library to generate the merkle tree and gets it's root and proof for any given distribution",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
