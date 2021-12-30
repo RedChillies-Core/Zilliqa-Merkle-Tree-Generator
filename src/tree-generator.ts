@@ -34,7 +34,7 @@ export const generateTreeforBech32 = (props: DataInterface[]) => {
     });
   });
   const tree = new MerkleTree(leavesData, sha256, {
-    sortLeaves: true,
+    sort: true,
   });
   const merkleRoot = tree.getRoot().toString('hex');
   accumulator.forEach((data) => {
@@ -57,7 +57,7 @@ export const generateTreeforBase16 = (props: DataInterface[]) => {
     });
   });
   const tree = new MerkleTree(leavesData, sha256, {
-    sortLeaves: true,
+    sort: true,
   });
   const merkleRoot = tree.getRoot().toString('hex');
   accumulator.forEach((data) => {
