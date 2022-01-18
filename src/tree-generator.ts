@@ -40,7 +40,9 @@ export const generateTreeforBech32 = (props: DataInterface[]) => {
   accumulator.forEach((data) => {
     const proof = tree.getHexProof(data.hex);
     data.proof = proof;
+    data.hex = `0x${data.hex}`;
   });
+  console.log(accumulator);
   return { root: `0x${merkleRoot}`, data: accumulator };
 };
 export const generateTreeforBase16 = (props: DataInterface[]) => {
@@ -62,6 +64,7 @@ export const generateTreeforBase16 = (props: DataInterface[]) => {
   accumulator.forEach((data) => {
     const proof = tree.getHexProof(data.hex);
     data.proof = proof;
+    data.hex = `0x${data.hex}`;
   });
   return { root: `0x${merkleRoot}`, data: accumulator };
 };
