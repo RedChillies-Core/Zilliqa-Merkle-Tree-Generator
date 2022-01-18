@@ -42,7 +42,6 @@ export const generateTreeforBech32 = (props: DataInterface[]) => {
     data.proof = proof;
     data.hex = `0x${data.hex}`;
   });
-  console.log(accumulator);
   return { root: `0x${merkleRoot}`, data: accumulator };
 };
 export const generateTreeforBase16 = (props: DataInterface[]) => {
